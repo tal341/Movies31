@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="rtl">
 <head>
   <meta charset="UTF-8" />
   <title>🎬 My Movie Tier List</title>
@@ -14,6 +14,8 @@
       background: #0a0a0a;
       color: white;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      direction: rtl;
+      text-align: right;
     }
     header {
       display: flex;
@@ -110,6 +112,8 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       position: relative;
       animation: modalPop 0.3s ease-out;
+      direction: rtl;
+      text-align: right;
     }
 
     @keyframes modalPop {
@@ -126,9 +130,10 @@
     }
 
     .modal p {
-      line-height: 1.6;
+      line-height: 1.8;
       margin-bottom: 15px;
       font-size: 15px;
+      text-align: right;
     }
 
     .close-modal {
@@ -170,6 +175,7 @@
       color: #ffdd55;
       margin-bottom: 15px;
       font-size: 18px;
+      text-align: right;
     }
 
     .tier-edit-row {
@@ -180,6 +186,7 @@
       padding: 8px;
       background: rgba(40,40,40,0.5);
       border-radius: 8px;
+      flex-direction: row-reverse;
     }
 
     .tier-edit-row input {
@@ -190,6 +197,7 @@
       color: white;
       border-radius: 6px;
       font-size: 15px;
+      text-align: right;
     }
 
     .tier-edit-row .label-preview {
@@ -344,7 +352,8 @@
 
     input[type="file"],
     .download-btn,
-    .reset-btn {
+    .reset-btn,
+    #saveListBtn {
       display: block;
       margin: 15px auto;
       padding: 12px 24px;
@@ -376,6 +385,85 @@
     .reset-btn:hover {
       background: rgba(100,50,50,0.9);
     }
+
+    #saveListBtn {
+      background: rgba(40,60,40,0.7);
+      border-color: rgba(80,120,80,0.4);
+    }
+    #saveListBtn:hover {
+      background: rgba(50,80,50,0.9);
+    }
+
+    /* Mobile Tier Selector Popup */
+    .mobile-tier-selector {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #222;
+      padding: 15px;
+      border-radius: 14px;
+      box-shadow: 0 5px 25px rgba(0,0,0,0.5);
+      z-index: 999;
+      display: none;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 90%;
+      backdrop-filter: blur(8px);
+    }
+
+    .mobile-tier-selector.active {
+      display: flex;
+    }
+
+    .tier-option {
+      padding: 8px 16px;
+      background: rgba(60,60,60,0.7);
+      border: 1px solid rgba(100,100,100,0.4);
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tier-option:hover {
+      background: rgba(100,100,100,0.8);
+      transform: translateY(-2px);
+    }
+
+    /* History Panel */
+    #historyPanel {
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(30,30,30,0.6);
+      border-radius: 14px;
+      display: none;
+    }
+
+    #historyPanel.active {
+      display: block;
+    }
+
+    .history-title {
+      color: #ffdd55;
+      margin-bottom: 15px;
+      font-size: 18px;
+    }
+
+    .history-item {
+      padding: 10px;
+      background: rgba(50,50,50,0.5);
+      margin-bottom: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .history-item:hover {
+      background: rgba(80,80,80,0.6);
+    }
   </style>
 </head>
 <body>
@@ -403,6 +491,7 @@
   <!-- עדיין אפשר להעלות ידנית -->
   <input type="file" id="fileInput" multiple accept="image/*">
 
+  <button id="saveListBtn" class="save-list-btn">💾 Save Current List</button>
   <button id="downloadBtn" class="download-btn">💾 Save as Image</button>
   <button id="resetBtn" class="reset-btn">🔄 Reset All</button>
 
@@ -410,15 +499,21 @@
   <div class="modal-overlay" id="settingsModal">
     <div class="modal">
       <button class="close-modal" id="closeSettings">&times;</button>
-      <h2>🛠 Settings & Help</h2>
+      <h2>🛠 הגדרות ועזרה</h2>
       
-      <p><strong>איך משתמשים?</strong><br>
-         הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
-         התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
-         או העלה תמונות ידנית דרך הכפתור.</p>
+      <p><strong>איך משתמשים באתר?</strong><br>
+         ◾ הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
+         ◾ התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
+         ◾ באפשרותך גם להעלות תמונות ידנית דרך הכפתור.<br><br>
 
-      <p><strong>שמירה:</strong><br>
-         לחץ על "Save as Image" כדי לשמור את הדירוג כקובץ PNG.</p>
+         <strong>שימוש בטלפון?</strong><br>
+         ◾ אין צורך לגרור! לחץ על כל פוסטר —<br>
+           ובחר לאיזה Tier להעביר אותו.<br><br>
+
+         <strong>שמירה והיסטוריה:</strong><br>
+         ◾ לחץ על "Save Current List" כדי לשמור את הדירוג הנוכחי.<br>
+         ◾ תוכל לטעון אותו שוב מאוחר יותר מההיסטוריה.<br>
+         ◾ לחץ על "Save as Image" כדי לשמור תמונה.</p>
 
       <div class="edit-tier-section">
         <h3>✏️ שנה את השמות של ה-Tiers (רק לך)</h3>
@@ -449,165 +544,16 @@
       </div>
 
       <div class="modal-credit">
-        Created with ❤️ by <strong>TaL.S</strong><br>
+        נוצר באהבה ע"י <strong>TaL.S</strong><br>
         תודה שבחרת להשתמש באתר!
       </div>
     </div>
   </div>
 
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const movieInput = document.getElementById('movieInput');
-    const unranked = document.getElementById('unranked-area');
-    const tiers = document.querySelectorAll('.tier');
-
-    // 🔑 מפתח API שלך — כבר מוכנס!
-    const OMDB_API_KEY = "ee77ebb9";
-
-    // 🎥 חיפוש סרט/סדרה לפי שם
-    movieInput.addEventListener('keypress', async (e) => {
-      if (e.key === 'Enter') {
-        const movieName = e.target.value.trim();
-        if (!movieName) return;
-
-        try {
-          const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieName)}&apikey=${OMDB_API_KEY}`);
-          const data = await response.json();
-
-          if (data.Response === "False") {
-            alert("לא מצאתי את הסרט/סדרה הזה 😕\nנסה שם אחר או באנגלית.");
-            return;
-          }
-
-          if (!data.Poster || data.Poster === "N/A") {
-            alert("לסרט הזה אין פוסטר זמין כרגע 🖼️");
-            return;
-          }
-
-          const img = document.createElement('img');
-          img.src = data.Poster;
-          img.alt = data.Title;
-          img.title = `${data.Title} (${data.Year}) • ${data.Type}`;
-          img.classList.add('poster');
-          img.draggable = true;
-          img.dataset.movieTitle = data.Title;
-          img.addEventListener('dragstart', dragStart);
-
-          img.onload = () => {
-            unranked.appendChild(img);
-            movieInput.value = '';
-            movieInput.placeholder = "🎬 Try another one...";
-          };
-
-          img.onerror = () => {
-            alert("שגיאה בטעינת התמונה. תנסה שוב?");
-          };
-
-        } catch (error) {
-          alert("אירעה שגיאה. יש אינטרנט?");
-          console.error(error);
-        }
-      }
-    });
-
-    // העלאת תמונות ידניות
-    fileInput.addEventListener('change', (event) => {
-      const files = event.target.files;
-      for (const file of files) {
-        if (!file.type.startsWith('image/')) continue;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.classList.add('poster');
-          img.draggable = true;
-          img.dataset.originalSrc = e.target.result;
-          img.addEventListener('dragstart', dragStart);
-          unranked.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function dragStart(e) {
-      e.dataTransfer.setData('text/plain', e.target.src);
-    }
-
-    tiers.forEach(tier => {
-      tier.addEventListener('dragover', (e) => e.preventDefault());
-      tier.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const src = e.dataTransfer.getData('text/plain');
-        const img = document.querySelector(`img[src='${src}']`);
-        if (img) tier.appendChild(img);
-      });
-    });
-
-    unranked.addEventListener('dragover', (e) => e.preventDefault());
-    unranked.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const src = e.dataTransfer.getData('text/plain');
-      const img = document.querySelector(`img[src='${src}']`);
-      if (img) unranked.appendChild(img);
-    });
-
-    // 🔄 Reset
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      const allPosters = document.querySelectorAll('.poster');
-      allPosters.forEach(poster => unranked.appendChild(poster));
-    });
-
-    // 💾 Download
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-      script.onload = () => {
-        const element = document.querySelector('.tier-list').parentNode;
-        html2canvas(element, {
-          backgroundColor: '#0a0a0a',
-          scale: 2,
-          useCORS: true,
-          allowTaint: true
-        }).then(canvas => {
-          const link = document.createElement('a');
-          link.download = 'my-movie-tierlist.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        });
-      };
-      document.head.appendChild(script);
-    });
-
-    // ✨ Settings Modal Toggle
-    const settingsBtn = document.getElementById('settingsBtn');
-    const closeSettings = document.getElementById('closeSettings');
-    const modalOverlay = document.getElementById('settingsModal');
-    const tierInputs = document.querySelectorAll('.tier-input');
-
-    settingsBtn.addEventListener('click', () => {
-      modalOverlay.classList.add('active');
-    });
-
-    closeSettings.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-    });
-
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
-        modalOverlay.classList.remove('active');
-      }
-    });
-
-    // 🖌️ Live edit tier labels
-    tierInputs.forEach(input => {
-      input.addEventListener('input', function() {
-        const targetTier = this.dataset.target;
-        const labelElement = document.querySelector(`.tier[data-tier="${targetTier}"] .tier-label`);
-        if (labelElement) {
-          labelElement.textContent = this.value;
-        }
-      });
-    });
-  </script>
-</body>
-</html>
+  <!-- Mobile Tier Selector -->
+  <div class="mobile-tier-selector" id="mobileTierSelector">
+    <div class="tier-option" data-tier="SSS">SSS</div>
+    <div class="tier-option" data-tier="SS">SS</div>
+    <div class="tier-option" data-tier="S">S</div>
+    <div class="tier-option" data-tier="A+">A+</div>
+    <div class="tier-option" data-tier="B">B</div>
