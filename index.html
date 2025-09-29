@@ -429,238 +429,47 @@
   <!-- Settings Modal -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal">
-      <button class="close-modal" id="closeSettings">&times;</button>
-      <h2>🛠 Settings & Help</h2>
-      
-      <p><strong>איך משתמשים?</strong><br>
-         הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
-         התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
-         או העלה תמונות ידנית דרך הכפתור.</p>
+    <button class="close-modal" id="closeSettings">&times;</button>
+<h2>🛠 הגדרות ועזרה</h2>
 
-      <p><strong>שמירה:</strong><br>
-         לחץ על "Save as Image" כדי לשמור את הדירוג כקובץ PNG.<br>
-         לחץ על "Save List" כדי לשמור את הרשימה הנוכחית בהיסטוריה ולטעון אותה שוב אחר כך.</p>
+<p dir="rtl" style="text-align: right;"><strong>איך משתמשים?</strong><br>
+   הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
+   התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים בעזרת העכבר.<br>
+   אם אתה בטלפון — לחץ על התמונה והיא תאפשר לך לבחור Tier בקלות.</p>
 
-      <div class="edit-tier-section">
-        <h3>✏️ שנה את השמות של ה-Tiers (רק לך)</h3>
-        <div class="tier-edit-row">
-          <span class="label-preview">SSS</span>
-          <input type="text" class="tier-input" data-target="SSS" placeholder="שם חדש ל-SSS" value="SSS">
-        </div>
-        <div class="tier-edit-row">
-          <span class="label-preview">SS</span>
-          <input type="text" class="tier-input" data-target="SS" placeholder="שם חדש ל-SS" value="SS">
-        </div>
-        <div class="tier-edit-row">
-          <span class="label-preview">S</span>
-          <input type="text" class="tier-input" data-target="S" placeholder="שם חדש ל-S" value="S">
-        </div>
-        <div class="tier-edit-row">
-          <span class="label-preview">A+</span>
-          <input type="text" class="tier-input" data-target="A+" placeholder="שם חדש ל-A+" value="A+">
-        </div>
-        <div class="tier-edit-row">
-          <span class="label-preview">B</span>
-          <input type="text" class="tier-input" data-target="B" placeholder="שם חדש ל-B" value="B">
-        </div>
-        <div class="tier-edit-row">
-          <span class="label-preview">C</span>
-          <input type="text" class="tier-input" data-target="C" placeholder="שם חדש ל-C" value="C">
-        </div>
-      </div>
+<p dir="rtl" style="text-align: right;"><strong>שמירה:</strong><br>
+   לחץ על "Save as Image" כדי לשמור את הדירוג כקובץ PNG.<br>
+   או השתמש ב-"Save List" כדי לשמור את הדירוג באתר ולהמשיך לדירוג הבא.</p>
 
-      <div class="history-section" style="margin-top: 30px;">
-        <h3 style="color: #ffdd55; margin-bottom: 15px; font-size: 18px;">📜 היסטוריית רשימות</h3>
-        <div id="historyList" style="max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(30,30,30,0.5); border-radius: 8px;">
-          <!-- רשימות ישמרו כאן -->
-        </div>
-      </div>
-
-      <div class="modal-credit">
-        Created with ❤️ by <strong>TaL.S</strong><br>
-        תודה שבחרת להשתמש באתר!
-      </div>
-    </div>
+<div class="edit-tier-section">
+  <h3 dir="rtl" style="text-align: right;">✏️ שנה את השמות של ה-Tiers (רק בשבילך)</h3>
+  <div class="tier-edit-row">
+    <span class="label-preview">SSS</span>
+    <input type="text" class="tier-input" data-target="SSS" placeholder="שם חדש ל-SSS" value="SSS">
   </div>
+  <div class="tier-edit-row">
+    <span class="label-preview">SS</span>
+    <input type="text" class="tier-input" data-target="SS" placeholder="שם חדש ל-SS" value="SS">
+  </div>
+  <div class="tier-edit-row">
+    <span class="label-preview">S</span>
+    <input type="text" class="tier-input" data-target="S" placeholder="שם חדש ל-S" value="S">
+  </div>
+  <div class="tier-edit-row">
+    <span class="label-preview">A+</span>
+    <input type="text" class="tier-input" data-target="A+" placeholder="שם חדש ל-A+" value="A+">
+  </div>
+  <div class="tier-edit-row">
+    <span class="label-preview">B</span>
+    <input type="text" class="tier-input" data-target="B" placeholder="שם חדש ל-B" value="B">
+  </div>
+  <div class="tier-edit-row">
+    <span class="label-preview">C</span>
+    <input type="text" class="tier-input" data-target="C" placeholder="שם חדש ל-C" value="C">
+  </div>
+</div>
 
-  <script>
-    const fileInput = document.getElementById('fileInput');
-    const movieInput = document.getElementById('movieInput');
-    const unranked = document.getElementById('unranked-area');
-    const tiers = document.querySelectorAll('.tier');
-
-    // 🔑 מפתח API שלך — כבר מוכנס!
-    const OMDB_API_KEY = "ee77ebb9";
-
-    // 🎥 חיפוש סרט/סדרה לפי שם
-    movieInput.addEventListener('keypress', async (e) => {
-      if (e.key === 'Enter') {
-        const movieName = e.target.value.trim();
-        if (!movieName) return;
-
-        try {
-          const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieName)}&apikey=${OMDB_API_KEY}`);
-          const data = await response.json();
-
-          if (data.Response === "False") {
-            alert("לא מצאתי את הסרט/סדרה הזה 😕\nנסה שם אחר או באנגלית.");
-            return;
-          }
-
-          if (!data.Poster || data.Poster === "N/A") {
-            alert("לסרט הזה אין פוסטר זמין כרגע 🖼️");
-            return;
-          }
-
-          const img = document.createElement('img');
-          img.src = data.Poster;
-          img.alt = data.Title;
-          img.title = `${data.Title} (${data.Year}) • ${data.Type}`;
-          img.classList.add('poster');
-          img.draggable = true;
-          img.dataset.movieTitle = data.Title;
-          img.addEventListener('dragstart', dragStart);
-
-          img.onload = () => {
-            unranked.appendChild(img);
-            movieInput.value = '';
-            movieInput.placeholder = "🎬 Try another one...";
-          };
-
-          img.onerror = () => {
-            alert("שגיאה בטעינת התמונה. תנסה שוב?");
-          };
-
-        } catch (error) {
-          alert("אירעה שגיאה. יש אינטרנט?");
-          console.error(error);
-        }
-      }
-    });
-
-    // העלאת תמונות ידניות
-    fileInput.addEventListener('change', (event) => {
-      const files = event.target.files;
-      for (const file of files) {
-        if (!file.type.startsWith('image/')) continue;
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = document.createElement('img');
-          img.src = e.target.result;
-          img.classList.add('poster');
-          img.draggable = true;
-          img.dataset.originalSrc = e.target.result;
-          img.addEventListener('dragstart', dragStart);
-          unranked.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function dragStart(e) {
-      e.dataTransfer.setData('text/plain', e.target.src);
-    }
-
-    tiers.forEach(tier => {
-      tier.addEventListener('dragover', (e) => e.preventDefault());
-      tier.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const src = e.dataTransfer.getData('text/plain');
-        const img = document.querySelector(`img[src='${src}']`);
-        if (img) tier.appendChild(img);
-      });
-    });
-
-    unranked.addEventListener('dragover', (e) => e.preventDefault());
-    unranked.addEventListener('drop', (e) => {
-      e.preventDefault();
-      const src = e.dataTransfer.getData('text/plain');
-      const img = document.querySelector(`img[src='${src}']`);
-      if (img) unranked.appendChild(img);
-    });
-
-    // 🔄 Reset
-    document.getElementById('resetBtn').addEventListener('click', () => {
-      const allPosters = document.querySelectorAll('.poster');
-      allPosters.forEach(poster => unranked.appendChild(poster));
-    });
-
-    // 💾 Download
-    document.getElementById('downloadBtn').addEventListener('click', () => {
-      const script = document.createElement('script');
-      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-      script.onload = () => {
-        const element = document.querySelector('.tier-list').parentNode;
-        html2canvas(element, {
-          backgroundColor: '#0a0a0a',
-          scale: 2,
-          useCORS: true,
-          allowTaint: true
-        }).then(canvas => {
-          const link = document.createElement('a');
-          link.download = 'my-movie-tierlist.png';
-          link.href = canvas.toDataURL('image/png');
-          link.click();
-        });
-      };
-      document.head.appendChild(script);
-    });
-
-    // ✨ Settings Modal Toggle
-    const settingsBtn = document.getElementById('settingsBtn');
-    const closeSettings = document.getElementById('closeSettings');
-    const modalOverlay = document.getElementById('settingsModal');
-    const tierInputs = document.querySelectorAll('.tier-input');
-
-    settingsBtn.addEventListener('click', () => {
-      modalOverlay.classList.add('active');
-      setTimeout(loadHistoryToModal, 100);
-    });
-
-    closeSettings.addEventListener('click', () => {
-      modalOverlay.classList.remove('active');
-    });
-
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) {
-        modalOverlay.classList.remove('active');
-      }
-    });
-
-    // 🖌️ Live edit tier labels
-    tierInputs.forEach(input => {
-      input.addEventListener('input', function() {
-        const targetTier = this.dataset.target;
-        const labelElement = document.querySelector(`.tier[data-tier="${targetTier}"] .tier-label`);
-        if (labelElement) {
-          labelElement.textContent = this.value;
-        }
-      });
-    });
-
-    // 🎯 Mobile: Tap Poster to Assign Tier (Mobile Only)
-    function isMobileDevice() {
-      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-    }
-
-    if (isMobileDevice()) {
-      document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('poster')) {
-          const poster = e.target;
-
-          // יצירת חלונית בחירה קטנה מעל התמונה
-          const selectorDiv = document.createElement('div');
-          selectorDiv.style.cssText = `
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #1a1a1a;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-            z-index: 2000;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            align-items: center;
+<div class="modal-credit">
+  נוצר באהבה ע"י <strong>TaL.S</strong><br>
+  תודה שבחרת להשתמש באתר!
+</div>
