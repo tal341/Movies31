@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" dir="rtl">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>🎬 My Movie Tier List</title>
@@ -14,8 +14,6 @@
       background: #0a0a0a;
       color: white;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      direction: rtl;
-      text-align: right;
     }
     header {
       display: flex;
@@ -112,8 +110,6 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.5);
       position: relative;
       animation: modalPop 0.3s ease-out;
-      direction: rtl;
-      text-align: right;
     }
 
     @keyframes modalPop {
@@ -130,10 +126,9 @@
     }
 
     .modal p {
-      line-height: 1.8;
+      line-height: 1.6;
       margin-bottom: 15px;
       font-size: 15px;
-      text-align: right;
     }
 
     .close-modal {
@@ -175,7 +170,6 @@
       color: #ffdd55;
       margin-bottom: 15px;
       font-size: 18px;
-      text-align: right;
     }
 
     .tier-edit-row {
@@ -186,7 +180,6 @@
       padding: 8px;
       background: rgba(40,40,40,0.5);
       border-radius: 8px;
-      flex-direction: row-reverse; /* הפוך ל-Rtl */
     }
 
     .tier-edit-row input {
@@ -197,7 +190,6 @@
       color: white;
       border-radius: 6px;
       font-size: 15px;
-      text-align: right;
     }
 
     .tier-edit-row .label-preview {
@@ -352,8 +344,7 @@
 
     input[type="file"],
     .download-btn,
-    .reset-btn,
-    .save-list-btn {
+    .reset-btn {
       display: block;
       margin: 15px auto;
       padding: 12px 24px;
@@ -386,84 +377,23 @@
       background: rgba(100,50,50,0.9);
     }
 
-    .save-list-btn {
-      background: rgba(40,80,40,0.7);
-      border-color: rgba(100,180,100,0.4);
-    }
-    .save-list-btn:hover {
-      background: rgba(50,100,50,0.9);
-    }
-
-    /* History Panel */
-    #historyPanel {
-      margin: 20px auto;
-      padding: 15px;
-      background: rgba(30,30,30,0.6);
-      border-radius: 12px;
-      max-width: 500px;
-      display: none;
+    /* ✅ תיקון כיוון טקסט ב-Settings (RTL) */
+    .modal p,
+    .modal h2,
+    .modal h3,
+    .modal-credit,
+    .edit-tier-section label {
+      direction: rtl;
+      text-align: right;
     }
 
-    #historyPanel h3 {
-      margin-top: 0;
-      color: #ffdd55;
-      text-align: center;
+    .tier-edit-row {
+      flex-direction: row-reverse;
+      text-align: right;
     }
 
-    .history-item {
-      display: block;
-      margin: 8px 0;
-      padding: 10px;
-      background: rgba(50,50,50,0.6);
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .history-item:hover {
-      background: rgba(70,70,70,0.8);
-    }
-
-    /* Mobile Tier Selector Popup */
-    .mobile-selector {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #222;
-      padding: 15px;
-      border-radius: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      z-index: 2000;
-      display: none;
-      flex-direction: row;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 90%;
-    }
-
-    .mobile-selector button {
-      padding: 8px 14px;
-      background: rgba(50,50,50,0.8);
-      border: 1px solid #444;
-      color: white;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: bold;
-      transition: all 0.2s;
-    }
-
-    .mobile-selector button:hover {
-      background: #ffdd55;
-      color: #000;
-    }
-
-    .mobile-selector button.selected {
-      background: #ffdd55;
-      color: #000;
-      transform: scale(1.05);
+    .tier-edit-row input {
+      text-align: right;
     }
   </style>
 </head>
@@ -492,14 +422,9 @@
   <!-- עדיין אפשר להעלות ידנית -->
   <input type="file" id="fileInput" multiple accept="image/*">
 
-  <button id="saveListBtn" class="save-list-btn">💾 Save Current List</button>
-  <div id="historyPanel">
-    <h3>📜 Your Saved Lists</h3>
-    <div id="historyContainer"></div>
-  </div>
-
-  <button id="downloadBtn" class="download-btn">🖼️ Save as Image</button>
+  <button id="downloadBtn" class="download-btn">💾 Save as Image</button>
   <button id="resetBtn" class="reset-btn">🔄 Reset All</button>
+  <button id="saveListBtn" class="download-btn" style="background: rgba(40,60,40,0.7); border-color: rgba(100,150,100,0.4);">💾 Save List</button>
 
   <!-- Settings Modal -->
   <div class="modal-overlay" id="settingsModal">
@@ -508,15 +433,13 @@
       <h2>🛠 Settings & Help</h2>
       
       <p><strong>איך משתמשים?</strong><br>
-         ✍️ הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
-         🖼️ התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
-         📎 או העלה תמונות ידנית דרך הכפתור.<br>
-         💾 לחץ על "Save Current List" כדי לשמור את הדירוג הנוכחי להיסטוריה.<br>
-         📱 בטלפון — לחץ על פוסטר כדי לבחור אליו Tier (גרירה לא עובדת טוב בטלפון).</p>
+         הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
+         התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
+         או העלה תמונות ידנית דרך הכפתור.</p>
 
       <p><strong>שמירה:</strong><br>
-         📥 כל רשימת דירוג שאתה שומר — נשמרת באופן מקומי במכשיר שלך.<br>
-         🔁 תוכל לטעון אותה מחדש בכל זמן דרך פאנל ההסטוריה.</p>
+         לחץ על "Save as Image" כדי לשמור את הדירוג כקובץ PNG.<br>
+         לחץ על "Save List" כדי לשמור את הרשימה הנוכחית בהיסטוריה ולטעון אותה שוב אחר כך.</p>
 
       <div class="edit-tier-section">
         <h3>✏️ שנה את השמות של ה-Tiers (רק לך)</h3>
@@ -546,6 +469,13 @@
         </div>
       </div>
 
+      <div class="history-section" style="margin-top: 30px;">
+        <h3 style="color: #ffdd55; margin-bottom: 15px; font-size: 18px;">📜 היסטוריית רשימות</h3>
+        <div id="historyList" style="max-height: 200px; overflow-y: auto; padding: 10px; background: rgba(30,30,30,0.5); border-radius: 8px;">
+          <!-- רשימות ישמרו כאן -->
+        </div>
+      </div>
+
       <div class="modal-credit">
         Created with ❤️ by <strong>TaL.S</strong><br>
         תודה שבחרת להשתמש באתר!
@@ -553,32 +483,14 @@
     </div>
   </div>
 
-  <!-- Mobile Tier Selector -->
-  <div class="mobile-selector" id="mobileSelector">
-    <button data-tier="SSS">SSS</button>
-    <button data-tier="SS">SS</button>
-    <button data-tier="S">S</button>
-    <button data-tier="A+">A+</button>
-    <button data-tier="B">B</button>
-    <button data-tier="C">C</button>
-    <button id="cancelMobileSelect" style="background:#804040;">ביטול</button>
-  </div>
-
   <script>
     const fileInput = document.getElementById('fileInput');
     const movieInput = document.getElementById('movieInput');
     const unranked = document.getElementById('unranked-area');
     const tiers = document.querySelectorAll('.tier');
-    const saveListBtn = document.getElementById('saveListBtn');
-    const historyPanel = document.getElementById('historyPanel');
-    const historyContainer = document.getElementById('historyContainer');
-    const mobileSelector = document.getElementById('mobileSelector');
-    const cancelMobileSelect = document.getElementById('cancelMobileSelect');
 
     // 🔑 מפתח API שלך — כבר מוכנס!
     const OMDB_API_KEY = "ee77ebb9";
-
-    let currentSelectedPoster = null;
 
     // 🎥 חיפוש סרט/סדרה לפי שם
     movieInput.addEventListener('keypress', async (e) => {
@@ -608,9 +520,6 @@
           img.draggable = true;
           img.dataset.movieTitle = data.Title;
           img.addEventListener('dragstart', dragStart);
-
-          // ✨ Mobile Click Support
-          img.addEventListener('click', handlePosterClick);
 
           img.onload = () => {
             unranked.appendChild(img);
@@ -642,7 +551,6 @@
           img.draggable = true;
           img.dataset.originalSrc = e.target.result;
           img.addEventListener('dragstart', dragStart);
-          img.addEventListener('click', handlePosterClick); // ✨ Mobile support
           unranked.appendChild(img);
         };
         reader.readAsDataURL(file);
@@ -659,13 +567,100 @@
         e.preventDefault();
         const src = e.dataTransfer.getData('text/plain');
         const img = document.querySelector(`img[src='${src}']`);
-        if (img) {
-          tier.appendChild(img);
-          if (mobileSelector.style.display === 'flex') {
-            mobileSelector.style.display = 'none';
-          }
-        }
+        if (img) tier.appendChild(img);
       });
     });
 
     unranked.addEventListener('dragover', (e) => e.preventDefault());
+    unranked.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const src = e.dataTransfer.getData('text/plain');
+      const img = document.querySelector(`img[src='${src}']`);
+      if (img) unranked.appendChild(img);
+    });
+
+    // 🔄 Reset
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      const allPosters = document.querySelectorAll('.poster');
+      allPosters.forEach(poster => unranked.appendChild(poster));
+    });
+
+    // 💾 Download
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+      script.onload = () => {
+        const element = document.querySelector('.tier-list').parentNode;
+        html2canvas(element, {
+          backgroundColor: '#0a0a0a',
+          scale: 2,
+          useCORS: true,
+          allowTaint: true
+        }).then(canvas => {
+          const link = document.createElement('a');
+          link.download = 'my-movie-tierlist.png';
+          link.href = canvas.toDataURL('image/png');
+          link.click();
+        });
+      };
+      document.head.appendChild(script);
+    });
+
+    // ✨ Settings Modal Toggle
+    const settingsBtn = document.getElementById('settingsBtn');
+    const closeSettings = document.getElementById('closeSettings');
+    const modalOverlay = document.getElementById('settingsModal');
+    const tierInputs = document.querySelectorAll('.tier-input');
+
+    settingsBtn.addEventListener('click', () => {
+      modalOverlay.classList.add('active');
+      setTimeout(loadHistoryToModal, 100);
+    });
+
+    closeSettings.addEventListener('click', () => {
+      modalOverlay.classList.remove('active');
+    });
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) {
+        modalOverlay.classList.remove('active');
+      }
+    });
+
+    // 🖌️ Live edit tier labels
+    tierInputs.forEach(input => {
+      input.addEventListener('input', function() {
+        const targetTier = this.dataset.target;
+        const labelElement = document.querySelector(`.tier[data-tier="${targetTier}"] .tier-label`);
+        if (labelElement) {
+          labelElement.textContent = this.value;
+        }
+      });
+    });
+
+    // 🎯 Mobile: Tap Poster to Assign Tier (Mobile Only)
+    function isMobileDevice() {
+      return ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    }
+
+    if (isMobileDevice()) {
+      document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('poster')) {
+          const poster = e.target;
+
+          // יצירת חלונית בחירה קטנה מעל התמונה
+          const selectorDiv = document.createElement('div');
+          selectorDiv.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: center;
