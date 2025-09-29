@@ -186,7 +186,7 @@
       padding: 8px;
       background: rgba(40,40,40,0.5);
       border-radius: 8px;
-      flex-direction: row-reverse;
+      flex-direction: row-reverse; /* הפוך ל-Rtl */
     }
 
     .tier-edit-row input {
@@ -353,7 +353,7 @@
     input[type="file"],
     .download-btn,
     .reset-btn,
-    #saveListBtn {
+    .save-list-btn {
       display: block;
       margin: 15px auto;
       padding: 12px 24px;
@@ -386,16 +386,47 @@
       background: rgba(100,50,50,0.9);
     }
 
-    #saveListBtn {
-      background: rgba(40,60,40,0.7);
-      border-color: rgba(80,120,80,0.4);
+    .save-list-btn {
+      background: rgba(40,80,40,0.7);
+      border-color: rgba(100,180,100,0.4);
     }
-    #saveListBtn:hover {
-      background: rgba(50,80,50,0.9);
+    .save-list-btn:hover {
+      background: rgba(50,100,50,0.9);
+    }
+
+    /* History Panel */
+    #historyPanel {
+      margin: 20px auto;
+      padding: 15px;
+      background: rgba(30,30,30,0.6);
+      border-radius: 12px;
+      max-width: 500px;
+      display: none;
+    }
+
+    #historyPanel h3 {
+      margin-top: 0;
+      color: #ffdd55;
+      text-align: center;
+    }
+
+    .history-item {
+      display: block;
+      margin: 8px 0;
+      padding: 10px;
+      background: rgba(50,50,50,0.6);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .history-item:hover {
+      background: rgba(70,70,70,0.8);
     }
 
     /* Mobile Tier Selector Popup */
-    .mobile-tier-selector {
+    .mobile-selector {
       position: fixed;
       bottom: 20px;
       left: 50%;
@@ -403,66 +434,36 @@
       background: #222;
       padding: 15px;
       border-radius: 14px;
-      box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-      z-index: 999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      z-index: 2000;
       display: none;
-      flex-wrap: wrap;
+      flex-direction: row;
       gap: 10px;
+      flex-wrap: wrap;
       justify-content: center;
       max-width: 90%;
-      backdrop-filter: blur(8px);
     }
 
-    .mobile-tier-selector.active {
-      display: flex;
-    }
-
-    .tier-option {
-      padding: 8px 16px;
-      background: rgba(60,60,60,0.7);
-      border: 1px solid rgba(100,100,100,0.4);
-      border-radius: 8px;
+    .mobile-selector button {
+      padding: 8px 14px;
+      background: rgba(50,50,50,0.8);
+      border: 1px solid #444;
       color: white;
-      font-weight: bold;
+      border-radius: 8px;
       cursor: pointer;
+      font-weight: bold;
       transition: all 0.2s;
     }
 
-    .tier-option:hover {
-      background: rgba(100,100,100,0.8);
-      transform: translateY(-2px);
+    .mobile-selector button:hover {
+      background: #ffdd55;
+      color: #000;
     }
 
-    /* History Panel */
-    #historyPanel {
-      margin-top: 20px;
-      padding: 20px;
-      background: rgba(30,30,30,0.6);
-      border-radius: 14px;
-      display: none;
-    }
-
-    #historyPanel.active {
-      display: block;
-    }
-
-    .history-title {
-      color: #ffdd55;
-      margin-bottom: 15px;
-      font-size: 18px;
-    }
-
-    .history-item {
-      padding: 10px;
-      background: rgba(50,50,50,0.5);
-      margin-bottom: 8px;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .history-item:hover {
-      background: rgba(80,80,80,0.6);
+    .mobile-selector button.selected {
+      background: #ffdd55;
+      color: #000;
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -492,28 +493,30 @@
   <input type="file" id="fileInput" multiple accept="image/*">
 
   <button id="saveListBtn" class="save-list-btn">💾 Save Current List</button>
-  <button id="downloadBtn" class="download-btn">💾 Save as Image</button>
+  <div id="historyPanel">
+    <h3>📜 Your Saved Lists</h3>
+    <div id="historyContainer"></div>
+  </div>
+
+  <button id="downloadBtn" class="download-btn">🖼️ Save as Image</button>
   <button id="resetBtn" class="reset-btn">🔄 Reset All</button>
 
   <!-- Settings Modal -->
   <div class="modal-overlay" id="settingsModal">
     <div class="modal">
       <button class="close-modal" id="closeSettings">&times;</button>
-      <h2>🛠 הגדרות ועזרה</h2>
+      <h2>🛠 Settings & Help</h2>
       
-      <p><strong>איך משתמשים באתר?</strong><br>
-         ◾ הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
-         ◾ התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
-         ◾ באפשרותך גם להעלות תמונות ידנית דרך הכפתור.<br><br>
+      <p><strong>איך משתמשים?</strong><br>
+         ✍️ הקלד שם של סרט או סדרה בשדה למעלה ולחץ Enter.<br>
+         🖼️ התמונה שתופיע תוכל לגרור ישירות ל-Tier המתאים.<br>
+         📎 או העלה תמונות ידנית דרך הכפתור.<br>
+         💾 לחץ על "Save Current List" כדי לשמור את הדירוג הנוכחי להיסטוריה.<br>
+         📱 בטלפון — לחץ על פוסטר כדי לבחור אליו Tier (גרירה לא עובדת טוב בטלפון).</p>
 
-         <strong>שימוש בטלפון?</strong><br>
-         ◾ אין צורך לגרור! לחץ על כל פוסטר —<br>
-           ובחר לאיזה Tier להעביר אותו.<br><br>
-
-         <strong>שמירה והיסטוריה:</strong><br>
-         ◾ לחץ על "Save Current List" כדי לשמור את הדירוג הנוכחי.<br>
-         ◾ תוכל לטעון אותו שוב מאוחר יותר מההיסטוריה.<br>
-         ◾ לחץ על "Save as Image" כדי לשמור תמונה.</p>
+      <p><strong>שמירה:</strong><br>
+         📥 כל רשימת דירוג שאתה שומר — נשמרת באופן מקומי במכשיר שלך.<br>
+         🔁 תוכל לטעון אותה מחדש בכל זמן דרך פאנל ההסטוריה.</p>
 
       <div class="edit-tier-section">
         <h3>✏️ שנה את השמות של ה-Tiers (רק לך)</h3>
@@ -544,16 +547,125 @@
       </div>
 
       <div class="modal-credit">
-        נוצר באהבה ע"י <strong>TaL.S</strong><br>
+        Created with ❤️ by <strong>TaL.S</strong><br>
         תודה שבחרת להשתמש באתר!
       </div>
     </div>
   </div>
 
   <!-- Mobile Tier Selector -->
-  <div class="mobile-tier-selector" id="mobileTierSelector">
-    <div class="tier-option" data-tier="SSS">SSS</div>
-    <div class="tier-option" data-tier="SS">SS</div>
-    <div class="tier-option" data-tier="S">S</div>
-    <div class="tier-option" data-tier="A+">A+</div>
-    <div class="tier-option" data-tier="B">B</div>
+  <div class="mobile-selector" id="mobileSelector">
+    <button data-tier="SSS">SSS</button>
+    <button data-tier="SS">SS</button>
+    <button data-tier="S">S</button>
+    <button data-tier="A+">A+</button>
+    <button data-tier="B">B</button>
+    <button data-tier="C">C</button>
+    <button id="cancelMobileSelect" style="background:#804040;">ביטול</button>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const movieInput = document.getElementById('movieInput');
+    const unranked = document.getElementById('unranked-area');
+    const tiers = document.querySelectorAll('.tier');
+    const saveListBtn = document.getElementById('saveListBtn');
+    const historyPanel = document.getElementById('historyPanel');
+    const historyContainer = document.getElementById('historyContainer');
+    const mobileSelector = document.getElementById('mobileSelector');
+    const cancelMobileSelect = document.getElementById('cancelMobileSelect');
+
+    // 🔑 מפתח API שלך — כבר מוכנס!
+    const OMDB_API_KEY = "ee77ebb9";
+
+    let currentSelectedPoster = null;
+
+    // 🎥 חיפוש סרט/סדרה לפי שם
+    movieInput.addEventListener('keypress', async (e) => {
+      if (e.key === 'Enter') {
+        const movieName = e.target.value.trim();
+        if (!movieName) return;
+
+        try {
+          const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(movieName)}&apikey=${OMDB_API_KEY}`);
+          const data = await response.json();
+
+          if (data.Response === "False") {
+            alert("לא מצאתי את הסרט/סדרה הזה 😕\nנסה שם אחר או באנגלית.");
+            return;
+          }
+
+          if (!data.Poster || data.Poster === "N/A") {
+            alert("לסרט הזה אין פוסטר זמין כרגע 🖼️");
+            return;
+          }
+
+          const img = document.createElement('img');
+          img.src = data.Poster;
+          img.alt = data.Title;
+          img.title = `${data.Title} (${data.Year}) • ${data.Type}`;
+          img.classList.add('poster');
+          img.draggable = true;
+          img.dataset.movieTitle = data.Title;
+          img.addEventListener('dragstart', dragStart);
+
+          // ✨ Mobile Click Support
+          img.addEventListener('click', handlePosterClick);
+
+          img.onload = () => {
+            unranked.appendChild(img);
+            movieInput.value = '';
+            movieInput.placeholder = "🎬 Try another one...";
+          };
+
+          img.onerror = () => {
+            alert("שגיאה בטעינת התמונה. תנסה שוב?");
+          };
+
+        } catch (error) {
+          alert("אירעה שגיאה. יש אינטרנט?");
+          console.error(error);
+        }
+      }
+    });
+
+    // העלאת תמונות ידניות
+    fileInput.addEventListener('change', (event) => {
+      const files = event.target.files;
+      for (const file of files) {
+        if (!file.type.startsWith('image/')) continue;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.classList.add('poster');
+          img.draggable = true;
+          img.dataset.originalSrc = e.target.result;
+          img.addEventListener('dragstart', dragStart);
+          img.addEventListener('click', handlePosterClick); // ✨ Mobile support
+          unranked.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function dragStart(e) {
+      e.dataTransfer.setData('text/plain', e.target.src);
+    }
+
+    tiers.forEach(tier => {
+      tier.addEventListener('dragover', (e) => e.preventDefault());
+      tier.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const src = e.dataTransfer.getData('text/plain');
+        const img = document.querySelector(`img[src='${src}']`);
+        if (img) {
+          tier.appendChild(img);
+          if (mobileSelector.style.display === 'flex') {
+            mobileSelector.style.display = 'none';
+          }
+        }
+      });
+    });
+
+    unranked.addEventListener('dragover', (e) => e.preventDefault());
